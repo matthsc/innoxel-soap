@@ -1,0 +1,13 @@
+{
+  "prettier.configPath": ".prettierrc",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "node_modules": true
+  },
+  "mocha.files.glob": "test/*.ts",
+  "mocha.requires": ["ts-node/register"]
+}
