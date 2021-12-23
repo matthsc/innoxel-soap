@@ -2,6 +2,10 @@
 
 Library to access Innoxel Master 3 SOAP API.
 
+![node](https://img.shields.io/node/v-lts/innoxel-soap)
+[![npm](https://img.shields.io/npm/v/innoxel-soap)](https://www.npmjs.com/package/innoxel-soap)
+[![license](https://img.shields.io/npm/l/innoxel-soap)](LICENSE)
+
 The current version has been tested against firmware 1.6.0.0, but mostly used to work against firmware 1.4.1.0 and 1.5.1.0 too.
 
 # Installation

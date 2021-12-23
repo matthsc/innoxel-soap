@@ -1,6 +1,6 @@
 {
   "name": "innoxel-soap",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "innoxel master soap api client",
   "keywords": [
     "innoxel",
@@ -30,7 +30,12 @@
     "build": "rimraf dist && npm run build:esm && npm run build:cjs && npm run build:types",
     "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
     "build:esm": "tsc --module es2015 --outDir dist/esm",
-    "build:types": "tsc --declaration --emitDeclarationOnly --declarationMap --outDir dist/types"
+    "build:types": "tsc --declaration --emitDeclarationOnly --declarationMap --outDir dist/types",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "release": "release-it",
+    "version": "npm run prettier && git add -A src"
   },
   "author": "Matthias Schwende (matthsc@gmx.net)",
   "license": "MIT",
@@ -56,10 +61,14 @@
     "mocha": "^9.1.3",
     "nock": "^13.2.1",
     "prettier": "^2.5.1",
+    "release-it": "^14.11.8",
     "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "mocha": {
     "require": [
       "ts-node/register"
@@ -67,5 +76,10 @@
     "spec": [
       "test/*.spec.ts"
     ]
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    }
   }
 }
