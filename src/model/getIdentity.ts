@@ -32,15 +32,15 @@ export interface IModuleInIdentity extends IModuleIdentityBase {
   };
 }
 
-export interface IModuleOutIdentity {
+export interface IModuleOutIdentity extends IModuleIdentityBase {
   class: "masterOutModule";
 }
 
-export interface IModuleDimIdentity {
+export interface IModuleDimIdentity extends IModuleIdentityBase {
   class: "masterDimModule";
 }
 
-export interface IModuleRoomClimateIdentity {
+export interface IModuleRoomClimateIdentity
+  extends Omit<IModuleIdentityBase, "channel"> {
   class: "masterRoomClimateModule";
-  channel: undefined;
 }
