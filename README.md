@@ -6,9 +6,9 @@ Library to access Innoxel Master 3 SOAP API.
 [![npm](https://img.shields.io/npm/v/innoxel-soap)](https://www.npmjs.com/package/innoxel-soap)
 [![license](https://img.shields.io/npm/l/innoxel-soap)](LICENSE)
 
-![build](https://img.shields.io/github/workflow/status/matthsc/innoxel-soap/build_and_test.yml)
+![build](https://img.shields.io/github/workflow/status/matthsc/innoxel-soap/Node.js%20CI)
 
-The current version has been tested against firmware 1.6.0.0, but mostly used to work against firmware 1.4.1.0 and 1.5.1.0 too.
+The current version has been tested against firmware 1.6.0.0, but most parts already worked against firmware 1.4.1.0 and 1.5.1.0 too.
 
 # Installation
 
@@ -44,6 +44,12 @@ TODO
 ## Advanced usage
 
 TODO
+
+# Limitations
+
+- Innoxel Master needs to be polled to retrieve updates, there is no pushing or callback mechanism.
+  - Whenever the state of i.e. a switch or dimmer changes, the state id changes too. So for performance reasons, consider using <code>getBootAndStateIds()</code> or <code>getBootAndStateIdXml()</code>, and only if this changes actually load the desired state data.
+- Switches can only be triggered, not set. So you can't set a switch _off_, but you can have it switch it's state from on=>off or off=>on.
 
 # Contributing
 
