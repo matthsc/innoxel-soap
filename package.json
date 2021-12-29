@@ -25,6 +25,7 @@
   "scripts": {
     "test": "mocha",
     "lint": "eslint . --ext .ts",
+    "check": "tsc --noEmit && npm run lint && npm test",
     "format": "npm run prettier",
     "prettier": "prettier --config .prettierrc \"{src,test}/**/*.ts\" --write",
     "build": "rimraf dist && npm run build:esm && npm run build:cjs && npm run build:types",
@@ -32,7 +33,7 @@
     "build:esm": "tsc --module es2015 --outDir dist/esm",
     "build:types": "tsc --declaration --emitDeclarationOnly --declarationMap --outDir dist/types",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "npm run check",
     "preversion": "npm run lint",
     "release": "dotenv release-it",
     "version": "npm run prettier && git add -A src"
