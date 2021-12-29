@@ -9,6 +9,7 @@ import {
   ModuleClass,
   ModuleIdentityType,
   ModuleInEvent,
+  ModuleOutEvent,
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
@@ -180,7 +181,7 @@ export class InnoxelApi {
   public async triggerOutModule(
     moduleIndex: number,
     channel: number,
-    event = "manualImpulse",
+    event: ModuleOutEvent = "toggle",
   ): Promise<void> {
     const message = new SoapMessage("setState");
     message.addModuleOutAction(moduleIndex, channel, event);

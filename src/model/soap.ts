@@ -12,6 +12,7 @@ export type ModuleClass =
   | "masterDimModule";
 
 export type ModuleInEvent = "autoImpulse" | "set" | "clear" | "nothing";
+export type ModuleOutEvent = "manualImpulse" | "toggle";
 
 export type GetIdentityModule =
   | "masterInModule"

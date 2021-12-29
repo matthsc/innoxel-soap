@@ -6,6 +6,12 @@ import { assert } from "chai";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 
+function sleep(millis: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, millis);
+  });
+}
+
 describe("Innoxel Master", function () {
   const ip = process.env.INNOXEL_IP as string;
   const port = Number.parseInt(process.env.INNOXEL_PORT || "5001");
@@ -78,5 +84,25 @@ describe("Innoxel Master", function () {
     assert.exists(identities);
     assert.isArray(identities);
     assert.isTrue(identities.length > 0);
+  });
+
+  it("triggers out module", async function () {
+    const moduleIndex = Number.parseInt(
+      process.env.INNOXEL_TEST_MODULE_OUT_INDEX || "-1",
+      10,
+    );
+    const channelIndex = Number.parseInt(
+      process.env.INNOXEL_TEST_MODULE_OUT_CHANNEL || "-1",
+      10,
+    );
+
+    if (moduleIndex < 0 || channelIndex < 0) {
+      this.skip();
+      return;
+    }
+
+    await api.triggerOutModule(moduleIndex, channelIndex);
+    await sleep(1000);
+    await api.triggerOutModule(moduleIndex, channelIndex);
   });
 });
