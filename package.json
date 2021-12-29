@@ -34,7 +34,7 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
-    "release": "release-it",
+    "release": "dotenv release-it",
     "version": "npm run prettier && git add -A src"
   },
   "author": "Matthias Schwende (matthsc@gmx.net)",
@@ -55,6 +55,7 @@
     "@typescript-eslint/parser": "^5.8.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0",
+    "dotenv-cli": "^4.1.1",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
