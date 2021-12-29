@@ -17,11 +17,14 @@ export interface IModuleIdentityBase {
   index: number;
   name: string;
   description: string;
-  channel: Array<{
-    index: number;
-    name: string;
-    description: string;
-  }>;
+  channel: IGetIdentityChannel[];
+}
+
+export interface IGetIdentityChannel {
+  index: number;
+  name: string;
+  description: string;
+  noxnetError?: { errorCode: number; errorDescription: string };
 }
 
 export interface IModuleInIdentity extends IModuleIdentityBase {

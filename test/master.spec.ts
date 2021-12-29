@@ -72,4 +72,11 @@ describe("Innoxel Master", function () {
       assert.include(id, "usid:");
     }
   });
+
+  it("loads identities", async function () {
+    const identities = await api.getIdentities();
+    assert.exists(identities);
+    assert.isArray(identities);
+    assert.isTrue(identities.length > 0);
+  });
 });
