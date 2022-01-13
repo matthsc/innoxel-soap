@@ -1,7 +1,10 @@
 /// <reference types="node" />
 
+import { assert, use as chaiUse } from "chai";
 import InnoxelApi from "../src/index";
-import { assert } from "chai";
+import chaiAsPromised from "chai-as-promised";
+
+chaiUse(chaiAsPromised);
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
@@ -29,12 +32,7 @@ describe("Innoxel Master", function () {
   it("throws on wrong port", async function () {
     this.timeout(5000);
     api = new InnoxelApi({ ip, port: port - 1, user, password });
-    try {
-      await api.getBootAndStateIdXml();
-      assert.fail("call should not succeed");
-    } catch {
-      // all good
-    }
+    assert.isRejected(api.getBootAndStateIdXml());
   });
 
   it("throws on wrong credentials", async function () {
@@ -48,12 +46,7 @@ describe("Innoxel Master", function () {
       }),
     ]) {
       api = wrongCredentialsApi;
-      try {
-        await api.getBootAndStateIdXml();
-        assert.fail("call should not succeed");
-      } catch {
-        // all good
-      }
+      assert.isRejected(api.getBootAndStateIdXml());
     }
   });
 
