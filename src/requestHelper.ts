@@ -1,3 +1,4 @@
+import { FaultResponseError } from "./errors";
 import { SoapAction } from "./model";
 import { XMLParser } from "fast-xml-parser";
 
@@ -15,8 +16,7 @@ export const parseXml = <T>(xml: string): T => {
     Envelope: { Body: T | { Fault: unknown } };
   };
   const objBody = obj.Envelope.Body;
-  if ("Fault" in objBody)
-    throw new Error(JSON.stringify(objBody.Fault, null, 2));
+  if ("Fault" in objBody) throw new FaultResponseError(objBody.Fault);
 
   return objBody as T;
 };

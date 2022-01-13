@@ -1,3 +1,4 @@
+import { EndpointError, NetworkError } from "../src/errors";
 import {
   bootAndStateIdXmlResponse,
   getIdentityResponseMasterDimModule,
@@ -28,6 +29,33 @@ describe("MOCK", function () {
 
   this.afterEach(function () {
     nock.cleanAll();
+  });
+
+  it("throws NetworkError on unknown exceptions", async () => {
+    const message = "Unknown network error";
+    const scope = createMock().replyWithError(message);
+    try {
+      await api.getBootAndStateIdXml();
+      assert.fail("no error thrown");
+    } catch (err: unknown) {
+      assert.isTrue(scope.isDone());
+      assert.instanceOf(err, NetworkError);
+      assert.include((err as Error).message, message);
+    }
+  });
+
+  it("throws EndpointError on API errors", async () => {
+    const body = { message: "Unauthorized" };
+    const scope = createMock().reply(500, body);
+    try {
+      await api.getBootAndStateIdXml();
+      assert.fail("no error thrown");
+    } catch (err: unknown) {
+      assert.isTrue(scope.isDone());
+      assert.instanceOf(err, EndpointError);
+      assert.equal((err as EndpointError).statusCode, 500);
+      assert.equal((err as EndpointError).message, JSON.stringify(body));
+    }
   });
 
   it("asks for auth", async function () {

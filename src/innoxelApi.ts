@@ -1,4 +1,5 @@
 import * as requestPromise from "request-promise-native";
+import { EndpointError, NetworkError, ResponseTagError } from "./errors";
 import {
   IDeviceStatusResponse,
   IGetIdentitiesResponse,
@@ -58,15 +59,30 @@ export class InnoxelApi {
         password: options.password,
         sendImmediately: false,
       },
+      resolveWithFullResponse: true,
+      simple: false,
     });
   }
 
   /** helper method for posting messages to innoxel master */
-  private postRawMessage(headers: HeadersInit, body: string): Promise<string> {
-    return this.request.post(this.endpoint, {
-      headers,
-      body,
-    });
+  private async postRawMessage(
+    headers: HeadersInit,
+    body: string,
+  ): Promise<string> {
+    let response: requestPromise.FullResponse;
+    try {
+      response = await this.request.post(this.endpoint, {
+        headers,
+        body,
+      });
+    } catch (err: unknown) {
+      throw new NetworkError(err as Error);
+    }
+
+    if (response.statusCode !== 200)
+      throw new EndpointError(response.statusCode, response.body);
+
+    return response.body as string;
   }
 
   /** helper method for posting messages to innoxel master and parsing the returned xml */
@@ -75,10 +91,10 @@ export class InnoxelApi {
       message.getHeaders(),
       message.getMessage(),
     );
+
     const body = parseXml<{ [tag: string]: T }>(xml);
     const responseTag = getResponseTag(message.action);
-    if (!body[responseTag])
-      throw new Error("Unexpected response: " + JSON.stringify(body));
+    if (!body[responseTag]) throw new ResponseTagError(message.action, body);
     return body[responseTag];
   }
 
