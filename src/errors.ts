@@ -1,27 +1,21 @@
 /** custom error object for network errors */
 export class NetworkError extends Error {
   constructor(public readonly parent: Error) {
-    super(parent.message); // 'Error' breaks prototype chain here for ES5/CommonJS builds
-    this.name = "NetworkError";
-    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+    super(parent.message);
   }
 }
 
 /** custom error object for api errors */
 export class EndpointError extends Error {
   constructor(public readonly statusCode: number, message: string) {
-    super(message); // 'Error' breaks prototype chain here for ES5/CommonJS builds
-    this.name = "EndpointError";
-    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+    super(message);
   }
 }
 
 /** custom error object for fault responses */
 export class FaultResponseError extends Error {
   constructor(public readonly fault: unknown) {
-    super("Innoxel Master Fault response"); // 'Error' breaks prototype chain here for ES5/CommonJS builds
-    this.name = "FaultResponseError";
-    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+    super("Innoxel Master Fault response");
   }
 }
 
@@ -31,8 +25,6 @@ export class ResponseTagError extends Error {
     public readonly action: string,
     public readonly response: unknown,
   ) {
-    super("Invalid response tag"); // 'Error' breaks prototype chain here for ES5/CommonJS builds
-    this.name = "ResponseTagError";
-    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+    super("Invalid response tag");
   }
 }
