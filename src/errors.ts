@@ -1,6 +1,6 @@
 /** custom error object for network errors */
 export class NetworkError extends Error {
-  constructor(public readonly parent: Error) {
+  constructor(parent: Error) {
     super(parent.message);
   }
 }
