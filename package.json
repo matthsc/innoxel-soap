@@ -37,7 +37,7 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run check",
     "preversion": "npm run lint",
-    "release": "dotenv release-it",
+    "release": "dotenv release-it --only-version",
     "version": "npm run prettier && git add -A src"
   },
   "author": "Matthias Schwende (matthsc@gmx.net)",
