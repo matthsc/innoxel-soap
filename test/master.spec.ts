@@ -1,13 +1,10 @@
 /// <reference types="node" />
-
+import "dotenv/config";
 import { assert, use as chaiUse } from "chai";
 import InnoxelApi from "../src/index";
 import chaiAsPromised from "chai-as-promised";
 
 chaiUse(chaiAsPromised);
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv").config();
 
 function sleep(millis: number): Promise<void> {
   return new Promise((resolve) => {
