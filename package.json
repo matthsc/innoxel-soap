@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "test:watch": "mocha --watch",
+    "test:watch": "mocha --watch --reporter min",
     "coverage": "nyc mocha",
     "lint": "eslint . --ext .ts",
     "check": "tsc --noEmit && npm run lint && npm test",
