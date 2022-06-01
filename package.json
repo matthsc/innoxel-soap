@@ -43,7 +43,7 @@
   "author": "Matthias Schwende (matthsc@gmx.net)",
   "license": "MIT",
   "dependencies": {
-    "fast-xml-parser": "^4.0.7",
+    "fast-xml-parser": "^4.0.8",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
     "tslib": "^2.3.1"
