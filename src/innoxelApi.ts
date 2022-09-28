@@ -14,6 +14,7 @@ import {
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
+import request from "request";
 
 /**
  * Options object for InnoxelApi class
@@ -38,7 +39,7 @@ export class InnoxelApi {
   /** request-promise-native object with default options applied */
   private readonly request: requestPromise.RequestPromiseAPI;
   /** perf: save headers for retrieval of boot and state ids */
-  private readonly getIdsMessageHeader: HeadersInit;
+  private readonly getIdsMessageHeader: request.Headers;
   /** perf: save body for retrieval of boot and state ids */
   private readonly getIdsMessageContent: string;
 
@@ -66,7 +67,7 @@ export class InnoxelApi {
 
   /** helper method for posting messages to innoxel master */
   private async postRawMessage(
-    headers: HeadersInit,
+    headers: request.Headers,
     body: string,
   ): Promise<string> {
     let response: requestPromise.FullResponse;

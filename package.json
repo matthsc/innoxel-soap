@@ -20,7 +20,7 @@
   },
   "bugs": "https://github.com/matthsc/innoxel-soap/issues",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "scripts": {
     "test": "mocha",
@@ -49,6 +49,7 @@
     "tslib": "^2.4.0"
   },
   "devDependencies": {
+    "@tsconfig/node14": "^1.0.3",
     "@types/chai": "^4.3.3",
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^9.1.1",
