@@ -11,7 +11,7 @@ const parser = new XMLParser({
 });
 
 /** helper method to parse xml responses */
-export const parseXml = <T>(xml: string): T => {
+export const parseXml = <T extends object>(xml: string): T => {
   const obj = parser.parse(xml) as {
     Envelope: { Body: T | { Fault: unknown } };
   };
