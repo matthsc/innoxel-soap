@@ -61,7 +61,7 @@
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^16.0.3",
-    "dotenv-cli": "^7.0.0",
+    "dotenv-cli": "^7.1.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
