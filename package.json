@@ -30,7 +30,7 @@
     "check": "tsc --noEmit && npm run lint && npm test",
     "format": "npm run prettier",
     "prettier": "prettier --config .prettierrc \"{src,test}/**/*.ts\" --write",
-    "build": "rimraf dist/* && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build": "rimraf --glob dist/* && npm run build:esm && npm run build:cjs && npm run build:types",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "build:esm": "tsc --module es2015 --outDir dist/esm",
     "build:types": "tsc --declaration --emitDeclarationOnly --declarationMap --outDir dist/types",
