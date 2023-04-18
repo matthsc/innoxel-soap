@@ -1,4 +1,9 @@
-import { ModuleClass, ModuleInEvent, SoapAction } from "./model";
+import {
+  ModuleClass,
+  ModuleInEvent,
+  ModuleRoomClimateSetType,
+  SoapAction,
+} from "./model";
 import request from "request";
 
 /** helper method to create the soap envelope and body, inserting the given actions xml */
@@ -224,6 +229,33 @@ export class SoapMessage {
       "masterOutModule",
       moduleIndex,
       `<u:channel index="${channel}" perform="${event}" />`,
+    );
+  }
+
+  /**
+   * adds setting a thermostat temperature to this soap message
+   * @param moduleIndex index of the module
+   * @param type type of temperature to set
+   * @param temperature temperature to set
+   */
+  public addModuleRoomClimateAction(
+    moduleIndex: number,
+    type: ModuleRoomClimateSetType,
+    temperature: number,
+  ) {
+    if (
+      !type.includes("setTemperature") &&
+      !type.includes("SetbackTemperature")
+    )
+      throw new Error(`invalid type: ${type}`);
+
+    this.ensureAction("setState");
+    this.addModule(
+      "masterRoomClimateModule",
+      moduleIndex,
+      `<u:thermostat><u:${type} value="${
+        Math.round(temperature * 2) / 2
+      }" /></u:thermostat>`,
     );
   }
 }

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import "dotenv/config";
+import InnoxelApi, { ModuleRoomClimateSetType } from "../src/index";
 import { assert, use as chaiUse } from "chai";
-import InnoxelApi from "../src/index";
 import chaiAsPromised from "chai-as-promised";
 
 chaiUse(chaiAsPromised);
@@ -94,5 +94,28 @@ describe("Innoxel Master", function () {
     await api.triggerOutModule(moduleIndex, channelIndex);
     await sleep(1000);
     await api.triggerOutModule(moduleIndex, channelIndex);
+  });
+
+  it("sets room temperature", async function () {
+    const moduleIndex = Number.parseInt(
+      process.env.INNOXEL_TEST_MODULE_ROOMCLIMATE_INDEX || "-1",
+      10,
+    );
+    const type = process.env.INNOXEL_TEST_MODULE_OUT_CHANNEL;
+
+    if (moduleIndex < 0 || !type) {
+      this.skip();
+      return;
+    }
+
+    const temperatures = [16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21];
+    const temperature =
+      temperatures[Math.floor(Math.random() * temperatures.length)];
+    const result = await api.setRoomClimate(
+      moduleIndex,
+      type as ModuleRoomClimateSetType,
+      temperature,
+    );
+    assert.equal(result, temperature);
   });
 });

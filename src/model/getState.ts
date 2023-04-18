@@ -29,6 +29,14 @@ export interface IModuleRoomTemperature extends IModuleBase {
   roomTemperature: IWeatherData;
 }
 
+export type ModuleRoomClimateSetType =
+  | "setTemperatureHeating"
+  | "setTemperatureCooling"
+  | "nightSetbackTemperatureHeating"
+  | "nightSetbackTemperatureCooling"
+  | "absenceSetbackTemperatureHeating"
+  | "absenceSetbackTemperatureCooling";
+
 export interface IModuleRoomClimate extends IModuleBase {
   class: "masterRoomClimateModule";
   index: number;

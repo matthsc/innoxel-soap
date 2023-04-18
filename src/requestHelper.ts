@@ -27,7 +27,7 @@ export const getResponseTag = (action: SoapAction): string => {
     case "getDeviceStateList":
       return "getDeviceStateResponse";
     default:
-      return action + "Response";
+      return `${action}Response`;
   }
 };
 

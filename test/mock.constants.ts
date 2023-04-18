@@ -191,3 +191,21 @@ export const getIdentityResponseMasterDimModule = `<?xml version="1.0"?>
         </u:getIdentityResponse>
     </s:Body>
 </s:Envelope>`;
+
+export const setStateResponseRoomClimate = `<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <s:Body>
+    <u:setStateResponse xmlns:u="urn:innoxel-ch:service:noxnetRemote:1">
+      <u:bootId>usid:3A09E102B4DE:00000000</u:bootId>
+      <u:stateId>usid:3A0AA8395483:0000C0C9:0000D2A3:00000008:000015D0</u:stateId>
+      <u:moduleList>
+        <u:module class="masterRoomClimateModule" index="0" state="undefined" possibleAddressConflict="no" missingParameters="no" lonley="no">
+          <u:thermostat operatingState="nightSetbackHeating" valveState="closed">
+            <u:setTemperatureHeating unit="°C" value="21.5" />
+          </u:thermostat>
+          <u:alarmState>nothing</u:alarmState>
+        </u:module>
+      </u:moduleList>
+    </u:setStateResponse>
+  </s:Body>
+</s:Envelope>`;

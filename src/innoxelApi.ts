@@ -7,10 +7,12 @@ import {
   IModuleBase,
   IModuleRoomClimate,
   IModuleWeather,
+  IWeatherData,
   ModuleClass,
   ModuleIdentityType,
   ModuleInEvent,
   ModuleOutEvent,
+  ModuleRoomClimateSetType,
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
@@ -221,5 +223,24 @@ export class InnoxelApi {
     const message = new SoapMessage("setState");
     message.addModuleDimAction(moduleIndex, channel, dimValue, dimSpeed);
     await this.postMessage<IGetStateResponse>(message);
+  }
+
+  /**
+   * set the temperature of a room climate module
+   * @param moduleIndex index of the module
+   * @param type type of temperature to set
+   * @param temperature temperature to set
+   */
+  public async setRoomClimate(
+    moduleIndex: number,
+    type: ModuleRoomClimateSetType,
+    temperature: number,
+  ) {
+    const message = new SoapMessage("setState");
+    message.addModuleRoomClimateAction(moduleIndex, type, temperature);
+    const response = await this.postMessage<IGetStateResponse>(message);
+    const module = response.moduleList.module as IModuleRoomClimate;
+    const data = module.thermostat[type] as IWeatherData;
+    return data.value;
   }
 }

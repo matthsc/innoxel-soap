@@ -5,6 +5,7 @@ import {
   getIdentityResponseMasterInModule,
   getIdentityResponseMasterOutModule,
   getIdentityResponseMasterRoomClimateModule,
+  setStateResponseRoomClimate,
 } from "./mock.constants";
 import InnoxelApi from "../src";
 import { assert } from "chai";
@@ -124,5 +125,11 @@ describe("MOCK", function () {
         ),
         `found ${masterClass}`,
       );
+  });
+
+  it("handles setting temperature", async function () {
+    createMock().reply(200, setStateResponseRoomClimate);
+    const result = await api.setRoomClimate(0, "setTemperatureHeating", 21.5);
+    assert.equal(result, "21.5");
   });
 });
