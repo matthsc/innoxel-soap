@@ -4,7 +4,6 @@ import {
   getIdentityResponseMasterOutModule,
 } from "./mock.constants";
 import { XMLValidator } from "fast-xml-parser";
-import { assert } from "chai";
 import { mergeModuleLists } from "./testHelper";
 
 describe("testHelper", function () {

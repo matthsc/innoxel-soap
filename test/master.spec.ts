@@ -1,10 +1,5 @@
-/// <reference types="node" />
 import "dotenv/config";
 import InnoxelApi, { ModuleRoomClimateSetType } from "../src/index";
-import { assert, use as chaiUse } from "chai";
-import chaiAsPromised from "chai-as-promised";
-
-chaiUse(chaiAsPromised);
 
 function sleep(millis: number): Promise<void> {
   return new Promise((resolve) => {
@@ -20,16 +15,20 @@ describe("Innoxel Master", function () {
   const skipTests = !ip || !port || !user || !password;
   let api: InnoxelApi;
 
-  beforeEach(function () {
-    if (skipTests) this.skip();
+  beforeEach(function ({ skip }) {
+    if (skipTests) skip();
 
     api = new InnoxelApi({ ip, port, user, password });
   });
 
   it("throws on wrong port", async function () {
-    this.timeout(5000);
     api = new InnoxelApi({ ip, port: port - 1, user, password });
-    assert.isRejected(api.getBootAndStateIdXml());
+    try {
+      await api.getBootAndStateIdXml();
+      assert.fail("Should have thrown");
+    } catch {
+      // expected
+    }
   });
 
   it("throws on wrong credentials", async function () {
@@ -43,7 +42,12 @@ describe("Innoxel Master", function () {
       }),
     ]) {
       api = wrongCredentialsApi;
-      assert.isRejected(api.getBootAndStateIdXml());
+      try {
+        await api.getBootAndStateIdXml();
+        assert.fail("Should have thrown");
+      } catch {
+        // expected
+      }
     }
   });
 
@@ -76,7 +80,7 @@ describe("Innoxel Master", function () {
     assert.isTrue(identities.length > 0);
   });
 
-  it("triggers out module", async function () {
+  it("triggers out module", async function ({ skip }) {
     const moduleIndex = Number.parseInt(
       process.env.INNOXEL_TEST_MODULE_OUT_INDEX || "-1",
       10,
@@ -87,7 +91,7 @@ describe("Innoxel Master", function () {
     );
 
     if (moduleIndex < 0 || channelIndex < 0) {
-      this.skip();
+      skip();
       return;
     }
 
@@ -96,15 +100,15 @@ describe("Innoxel Master", function () {
     await api.triggerOutModule(moduleIndex, channelIndex);
   });
 
-  it("sets room temperature", async function () {
+  it("sets room temperature", async function ({ skip }) {
     const moduleIndex = Number.parseInt(
       process.env.INNOXEL_TEST_MODULE_ROOMCLIMATE_INDEX || "-1",
       10,
     );
-    const type = process.env.INNOXEL_TEST_MODULE_OUT_CHANNEL;
+    const type = process.env.INNOXEL_TEST_MODULE_ROOMCLIMATE_TYPE;
 
     if (moduleIndex < 0 || !type) {
-      this.skip();
+      skip();
       return;
     }
 

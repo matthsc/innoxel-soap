@@ -8,6 +8,5 @@
   "files.exclude": {
     "node_modules": true
   },
-  "mocha.files.glob": "test/*.ts",
-  "mocha.requires": ["ts-node/register"]
+  "typescript.tsdk": "node_modules\\typescript\\lib",
 }

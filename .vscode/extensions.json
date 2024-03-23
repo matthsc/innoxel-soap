@@ -3,7 +3,7 @@
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    "maty.vscode-mocha-sidebar",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "vitest.explorer"
   ]
 }

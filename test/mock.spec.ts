@@ -8,7 +8,6 @@ import {
   setStateResponseRoomClimate,
 } from "./mock.constants";
 import InnoxelApi from "../src";
-import { assert } from "chai";
 import { mergeModuleLists } from "./testHelper";
 import nock from "nock";
 
@@ -28,7 +27,7 @@ describe("MOCK", function () {
     api = new InnoxelApi({ ip, port, user, password: pass });
   });
 
-  this.afterEach(function () {
+  afterEach(function () {
     nock.cleanAll();
   });
 
