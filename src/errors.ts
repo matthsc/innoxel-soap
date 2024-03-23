@@ -7,7 +7,10 @@ export class NetworkError extends Error {
 
 /** custom error object for api errors */
 export class EndpointError extends Error {
-  constructor(public readonly statusCode: number, message: string) {
+  constructor(
+    public readonly statusCode: number,
+    message: string,
+  ) {
     super(message);
   }
 }
