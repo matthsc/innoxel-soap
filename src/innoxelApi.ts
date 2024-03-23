@@ -18,6 +18,8 @@ import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
 import request from "request";
 
+export type SoapLogger = (status: string | number, message: string) => void;
+
 /**
  * Options object for InnoxelApi class
  */
@@ -30,6 +32,8 @@ export interface IInnoxelApiOptions {
   user: string;
   /** password */
   password: string;
+  /** logging for soap messages sent to/from innoxel master */
+  soapLogger?: SoapLogger;
 }
 
 /**
@@ -38,6 +42,8 @@ export interface IInnoxelApiOptions {
 export class InnoxelApi {
   /** innoxel master endpoint url */
   private readonly endpoint: string;
+  /** logging for soap messages sent to/from innoxel master */
+  private readonly soapLogger?: SoapLogger;
   /** request-promise-native object with default options applied */
   private readonly request: requestPromise.RequestPromiseAPI;
   /** perf: save headers for retrieval of boot and state ids */
@@ -65,6 +71,8 @@ export class InnoxelApi {
       resolveWithFullResponse: true,
       simple: false,
     });
+
+    this.soapLogger = options.soapLogger;
   }
 
   /** helper method for posting messages to innoxel master */
@@ -74,6 +82,7 @@ export class InnoxelApi {
   ): Promise<string> {
     let response: requestPromise.FullResponse;
     try {
+      this.soapLogger?.("POST", body);
       response = await this.request.post(this.endpoint, {
         headers,
         body,
@@ -81,6 +90,8 @@ export class InnoxelApi {
     } catch (err: unknown) {
       throw new NetworkError(err as Error);
     }
+
+    this.soapLogger?.(response.statusCode, response.body);
 
     if (response.statusCode !== 200)
       throw new EndpointError(response.statusCode, response.body);
