@@ -7,13 +7,15 @@
     "api",
     "soap"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "exports": {
-    "require": "./dist/cjs/index.js",
-    "import": "./dist/esm/index.js"
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
-  "types": "./dist/types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/matthsc/innoxel-soap"
@@ -29,16 +31,13 @@
     "lint": "eslint . --ext .ts",
     "check": "run-s check:* lint test",
     "check:tsc": "tsc --noEmit",
-    "clean": "rimraf --glob dist/*",
+    "check:exports": "attw --pack .",
     "format": "npm run prettier",
     "prettier": "prettier --config .prettierrc \"{src,test}/**/*.ts\" --write",
-    "build": "run-s clean build:*",
-    "build:cjs": "tsc --module commonjs --moduleResolution node  --outDir dist/cjs",
-    "build:esm": "tsc --module es2022 --moduleResolution node --outDir dist/esm",
-    "build:types": "tsc --declaration --emitDeclarationOnly --declarationMap --outDir dist/types",
+    "build": "tsup",
     "prepare": "npm run build",
     "prepublishOnly": "npm run check",
-    "preversion": "npm run lint",
+    "preversion": "npm run check",
     "release": "dotenv release-it --only-version",
     "version": "npm run prettier && git add -A src"
   },
@@ -47,10 +46,10 @@
   "dependencies": {
     "fast-xml-parser": "^4.5.0",
     "request": "^2.88.2",
-    "request-promise-native": "^1.0.9",
-    "tslib": "^2.8.1"
+    "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.16.4",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.17.6",
     "@types/request": "^2.48.12",
@@ -67,7 +66,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.3.3",
     "release-it": "^17.10.0",
-    "rimraf": "^5.0.10",
+    "tsup": "^8.3.5",
     "typescript": "^5.6.3",
     "vitest": "^2.0.5"
   },
