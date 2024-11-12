@@ -1,6 +1,6 @@
 import * as requestPromise from "request-promise-native";
 import { EndpointError, NetworkError, ResponseTagError } from "./errors";
-import {
+import type {
   IDeviceStatusResponse,
   IGetIdentitiesResponse,
   IGetStateResponse,
@@ -16,7 +16,7 @@ import {
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
-import request from "request";
+import type request from "request";
 
 export type SoapLogger = (status: string | number, message: string) => void;
 

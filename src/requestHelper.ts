@@ -1,5 +1,5 @@
 import { FaultResponseError } from "./errors";
-import { SoapAction } from "./model";
+import type { SoapAction } from "./model";
 import { XMLParser } from "fast-xml-parser";
 
 // initialize fast-xml-parser

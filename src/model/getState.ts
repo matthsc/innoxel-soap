@@ -1,4 +1,4 @@
-import { IChannelBase, IModuleBase } from "./soap";
+import type { IChannelBase, IModuleBase } from "./soap";
 
 export interface IGetStateResponse {
   bootId: string;

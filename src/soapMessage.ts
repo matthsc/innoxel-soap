@@ -1,10 +1,10 @@
-import {
+import type {
   ModuleClass,
   ModuleInEvent,
   ModuleRoomClimateSetType,
   SoapAction,
 } from "./model";
-import request from "request";
+import type request from "request";
 
 /** helper method to create the soap envelope and body, inserting the given actions xml */
 function createEnvelopeAndBody(actionXml: string): string {
@@ -79,7 +79,7 @@ export class SoapMessage {
   public getHeaders(): request.Headers {
     return {
       "content-type": `text/xml; charset="utf-8"`,
-      soapaction: "urn:innoxel-ch:service:noxnetRemote:1#" + this.action,
+      soapaction: `urn:innoxel-ch:service:noxnetRemote:1#${this.action}`,
     };
   }
 
@@ -152,7 +152,7 @@ export class SoapMessage {
    */
   public addThermostats(ids: number[]): void {
     this.ensureAction("getState", "getIdentity");
-    ids.forEach((index) =>
+    for (const index of ids)
       this.addModule(
         "masterRoomClimateModule",
         index,
@@ -168,8 +168,7 @@ export class SoapMessage {
 						<u:absenceSetbackTemperatureHeating />
 						<u:absenceSetbackTemperatureCooling />
 					</u:thermostat>`,
-      ),
-    );
+      );
   }
 
   /**
@@ -195,8 +194,8 @@ export class SoapMessage {
    * adds setting a dimmer to this soap message
    * @param moduleIndex module index
    * @param channel channel index
-   * @param dimValue dim value (0-100)
-   * @param dimSpeed dim speed (0-15)
+   * @param value dim value (0-100)
+   * @param speed dim speed (0-15)
    */
   public addModuleDimAction(
     moduleIndex: number,
@@ -205,11 +204,13 @@ export class SoapMessage {
     dimSpeed: number,
   ): void {
     this.ensureAction("setState");
-    if (dimValue < 0) dimValue = 0;
-    if (dimValue > 100) dimValue = 100;
-    if (dimSpeed < 0) dimSpeed = 0;
-    if (dimSpeed > 15) dimSpeed = 15;
-    const content = `<u:channel index="${channel}" dimValue="${dimValue}" dimSpeed="${dimSpeed}"/>`;
+    let value = dimValue;
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+    let speed = dimSpeed;
+    if (speed < 0) speed = 0;
+    if (speed > 15) speed = 15;
+    const content = `<u:channel index="${channel}" dimValue="${value}" dimSpeed="${speed}"/>`;
     this.addModule("masterDimModule", moduleIndex, content);
   }
 

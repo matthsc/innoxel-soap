@@ -1,5 +1,5 @@
 import "dotenv/config";
-import InnoxelApi, { ModuleRoomClimateSetType } from "../src/index";
+import InnoxelApi, { type ModuleRoomClimateSetType } from "../src/index";
 
 function sleep(millis: number): Promise<void> {
   return new Promise((resolve) => {
@@ -7,7 +7,7 @@ function sleep(millis: number): Promise<void> {
   });
 }
 
-describe("Innoxel Master", function () {
+describe("Innoxel Master", () => {
   const ip = process.env.INNOXEL_IP as string;
   const port = Number.parseInt(process.env.INNOXEL_PORT || "5001");
   const user = process.env.INNOXEL_USER as string;
@@ -15,13 +15,13 @@ describe("Innoxel Master", function () {
   const skipTests = !ip || !port || !user || !password;
   let api: InnoxelApi;
 
-  beforeEach(function ({ skip }) {
+  beforeEach(({ skip }) => {
     if (skipTests) skip();
 
     api = new InnoxelApi({ ip, port, user, password });
   });
 
-  it("throws on wrong port", async function () {
+  it("throws on wrong port", async () => {
     api = new InnoxelApi({ ip, port: port - 1, user, password });
     try {
       await api.getBootAndStateIdXml();
@@ -31,7 +31,7 @@ describe("Innoxel Master", function () {
     }
   });
 
-  it("throws on wrong credentials", async function () {
+  it("throws on wrong credentials", async () => {
     for (const wrongCredentialsApi of [
       new InnoxelApi({ ip, port, user: "i-shouldnt exists", password }),
       new InnoxelApi({
@@ -51,7 +51,7 @@ describe("Innoxel Master", function () {
     }
   });
 
-  it("loads boot and state id xml", async function () {
+  it("loads boot and state id xml", async () => {
     const xml = await api.getBootAndStateIdXml();
     for (const tag of [
       "Envelope",
@@ -63,7 +63,7 @@ describe("Innoxel Master", function () {
       assert.include(xml, tag);
   });
 
-  it("loads boot and state ids", async function () {
+  it("loads boot and state ids", async () => {
     const ids = await api.getBootAndStateIds();
     assert.lengthOf(ids, 2);
     for (const id of ids) {
@@ -73,14 +73,14 @@ describe("Innoxel Master", function () {
     }
   });
 
-  it("loads identities", async function () {
+  it("loads identities", async () => {
     const identities = await api.getIdentities();
     assert.exists(identities);
     assert.isArray(identities);
     assert.isTrue(identities.length > 0);
   });
 
-  it("triggers out module", async function ({ skip }) {
+  it("triggers out module", async ({ skip }) => {
     const moduleIndex = Number.parseInt(
       process.env.INNOXEL_TEST_MODULE_OUT_INDEX || "-1",
       10,
@@ -100,7 +100,7 @@ describe("Innoxel Master", function () {
     await api.triggerOutModule(moduleIndex, channelIndex);
   });
 
-  it("sets room temperature", async function ({ skip }) {
+  it("sets room temperature", async ({ skip }) => {
     const moduleIndex = Number.parseInt(
       process.env.INNOXEL_TEST_MODULE_ROOMCLIMATE_INDEX || "-1",
       10,

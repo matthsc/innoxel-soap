@@ -1,4 +1,4 @@
-import { GetIdentityModule } from "./soap";
+import type { GetIdentityModule } from "./soap";
 
 export interface IGetIdentitiesResponse {
   moduleList: {

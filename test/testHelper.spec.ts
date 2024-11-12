@@ -6,8 +6,8 @@ import {
 import { XMLValidator } from "fast-xml-parser";
 import { mergeModuleLists } from "./testHelper";
 
-describe("testHelper", function () {
-  describe("mergeModuleLists", function () {
+describe("testHelper", () => {
+  describe("mergeModuleLists", () => {
     it("returns empty string if no responses given", () => {
       assert.equal(mergeModuleLists(), "");
     });

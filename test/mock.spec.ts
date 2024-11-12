@@ -20,14 +20,14 @@ function createMock() {
   return nock(`http://${ip}:${port}`).post("/control");
 }
 
-describe("MOCK", function () {
+describe("MOCK", () => {
   let api: InnoxelApi;
 
-  beforeEach(function () {
+  beforeEach(() => {
     api = new InnoxelApi({ ip, port, user, password: pass });
   });
 
-  afterEach(function () {
+  afterEach(() => {
     nock.cleanAll();
   });
 
@@ -58,7 +58,7 @@ describe("MOCK", function () {
     }
   });
 
-  it("asks for auth", async function () {
+  it("asks for auth", async () => {
     const scope = createMock().reply(401, undefined, {
       "WWW-AUTHENTICATE": `Digest realm="INNOXEL Master 3", nonce="test-nounce", algorithm="MD5", qop="auth"`,
     });
@@ -69,7 +69,7 @@ describe("MOCK", function () {
     assert.isTrue(nock.isDone(), "nock should be done");
   });
 
-  it("extracts boot and state ids", async function () {
+  it("extracts boot and state ids", async () => {
     createMock().reply(200, bootAndStateIdXmlResponse);
     const [bootId, stateId] = await api.getBootAndStateIds();
     assert.equal(bootId, "usid:3A006A0F3FAB:00000000");
@@ -80,7 +80,7 @@ describe("MOCK", function () {
     assert.isTrue(nock.isDone(), "nock should be done");
   });
 
-  it("parses getIdentity responses", async function () {
+  it("parses getIdentity responses", async () => {
     createMock().reply(
       200,
       mergeModuleLists(
@@ -105,7 +105,7 @@ describe("MOCK", function () {
       );
   });
 
-  it("includes channels with errors", async function () {
+  it("includes channels with errors", async () => {
     createMock().reply(
       200,
       mergeModuleLists(
@@ -126,7 +126,7 @@ describe("MOCK", function () {
       );
   });
 
-  it("handles setting temperature", async function () {
+  it("handles setting temperature", async () => {
     createMock().reply(200, setStateResponseRoomClimate);
     const result = await api.setRoomClimate(0, "setTemperatureHeating", 21.5);
     assert.equal(result, "21.5");
