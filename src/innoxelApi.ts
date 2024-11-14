@@ -1,4 +1,3 @@
-import * as requestPromise from "request-promise-native";
 import { EndpointError, NetworkError, ResponseTagError } from "./errors";
 import type {
   IDeviceStatusResponse,
@@ -16,7 +15,7 @@ import type {
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
-import type request from "request";
+import DigestClient from "digest-fetch";
 
 export type SoapLogger = (status: string | number, message: string) => void;
 
@@ -44,10 +43,10 @@ export class InnoxelApi {
   private readonly endpoint: string;
   /** logging for soap messages sent to/from innoxel master */
   private readonly soapLogger?: SoapLogger;
-  /** request-promise-native object with default options applied */
-  private readonly request: requestPromise.RequestPromiseAPI;
+  /** digest-fetch client */
+  private readonly client: DigestClient;
   /** perf: save headers for retrieval of boot and state ids */
-  private readonly getIdsMessageHeader: request.Headers;
+  private readonly getIdsMessageHeader: Headers;
   /** perf: save body for retrieval of boot and state ids */
   private readonly getIdsMessageContent: string;
 
@@ -61,29 +60,22 @@ export class InnoxelApi {
     // prepare endpoint url
     this.endpoint = `http://${options.ip}:${options.port ?? 5001}/control`;
 
-    // prepare request-promise-native object
-    this.request = requestPromise.defaults({
-      auth: {
-        user: options.user,
-        password: options.password,
-        sendImmediately: false,
-      },
-      resolveWithFullResponse: true,
-      simple: false,
-    });
+    // prepare digest fetch client
+    this.client = new DigestClient(options.user, options.password);
 
     this.soapLogger = options.soapLogger;
   }
 
   /** helper method for posting messages to innoxel master */
   private async postRawMessage(
-    headers: request.Headers,
+    headers: Headers,
     body: string,
   ): Promise<string> {
-    let response: requestPromise.FullResponse;
+    let response: Response;
     try {
       this.soapLogger?.("POST", body);
-      response = await this.request.post(this.endpoint, {
+      response = await this.client.fetch(this.endpoint, {
+        method: "POST",
         headers,
         body,
       });
@@ -91,12 +83,12 @@ export class InnoxelApi {
       throw new NetworkError(err as Error);
     }
 
-    this.soapLogger?.(response.statusCode, response.body);
+    const responseBody = await response.text();
+    this.soapLogger?.(response.status, responseBody);
 
-    if (response.statusCode !== 200)
-      throw new EndpointError(response.statusCode, response.body);
+    if (!response.ok) throw new EndpointError(response.status, responseBody);
 
-    return response.body as string;
+    return responseBody;
   }
 
   /** helper method for posting messages to innoxel master and parsing the returned xml */

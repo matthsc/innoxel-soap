@@ -4,7 +4,6 @@ import type {
   ModuleRoomClimateSetType,
   SoapAction,
 } from "./model";
-import type request from "request";
 
 /** helper method to create the soap envelope and body, inserting the given actions xml */
 function createEnvelopeAndBody(actionXml: string): string {
@@ -76,11 +75,11 @@ export class SoapMessage {
   /**
    * @returns the http headers required for this soap message
    */
-  public getHeaders(): request.Headers {
-    return {
-      "content-type": `text/xml; charset="utf-8"`,
+  public getHeaders(): Headers {
+    return new Headers({
+      "Content-Type": `text/xml; charset="utf-8"`,
       soapaction: `urn:innoxel-ch:service:noxnetRemote:1#${this.action}`,
-    };
+    });
   }
 
   /**
