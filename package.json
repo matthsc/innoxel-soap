@@ -47,11 +47,11 @@
     "fast-xml-parser": "^4.5.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.4",
+    "@arethetypeswrong/cli": "^0.17.0",
     "@biomejs/biome": "1.9.4",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.17.6",
-    "@vitest/coverage-v8": "^2.1.4",
+    "@vitest/coverage-v8": "^2.1.5",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "nock": "^14.0.0-beta.16",
@@ -59,7 +59,7 @@
     "release-it": "^17.10.0",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.5"
   },
   "files": [
     "dist/**/*"
