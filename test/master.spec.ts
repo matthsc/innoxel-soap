@@ -9,7 +9,7 @@ function sleep(millis: number): Promise<void> {
 
 describe("Innoxel Master", () => {
   const ip = process.env.INNOXEL_IP as string;
-  const port = Number.parseInt(process.env.INNOXEL_PORT || "5001");
+  const port = Number.parseInt(process.env.INNOXEL_PORT || "5001", 10);
   const user = process.env.INNOXEL_USER as string;
   const password = process.env.INNOXEL_PASS as string;
   const skipTests = !ip || !port || !user || !password;
