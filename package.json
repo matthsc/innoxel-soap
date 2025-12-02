@@ -51,7 +51,7 @@
     "@biomejs/biome": "^2.3.8",
     "@tsconfig/node20": "^20.1.8",
     "@types/node": "^20.17.6",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.0.15",
     "dotenv": "^17.2.3",
     "dotenv-cli": "^11.0.0",
     "nock": "^14.0.10",
@@ -59,7 +59,7 @@
     "release-it": "^19.0.6",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vitest": "^3.0.7"
+    "vitest": "^4.0.15"
   },
   "files": [
     "dist/**/*"
