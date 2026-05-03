@@ -31,7 +31,7 @@ function createSoapAction(
 
 /** helper method to create a soap module list */
 function createModuleList(modules: string[]): string {
-  if (!modules || !modules.length) return "";
+  if (!modules?.length) return "";
 
   return `
             <u:moduleList>
