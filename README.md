@@ -7,10 +7,6 @@ Library to access Innoxel Master 3 SOAP API.
 [![license](https://img.shields.io/npm/l/innoxel-soap)](LICENSE)
 
 ![build](https://img.shields.io/github/actions/workflow/status/matthsc/innoxel-soap/build-and-test.yml?branch=main)
-[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/matthsc/innoxel-soap)
-![Code Climate issues](https://img.shields.io/codeclimate/issues/matthsc/innoxel-soap)
-![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/matthsc/innoxel-soap)
-](https://codeclimate.com/github/matthsc/innoxel-soap)
 
 The current version has been tested against firmware 1.6.0.0, but most parts already worked against firmware 1.4.1.0 and 1.5.1.0 too.
 
