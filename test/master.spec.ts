@@ -1,5 +1,5 @@
 import "dotenv/config";
-import InnoxelApi, { type ModuleRoomClimateSetType } from "../src/index";
+import { InnoxelApi, type ModuleRoomClimateSetType } from "../src/index";
 
 function sleep(millis: number): Promise<void> {
   return new Promise((resolve) => {
