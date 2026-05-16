@@ -1,13 +1,22 @@
-import { EndpointError, NetworkError } from "../src/errors";
+import {
+  EndpointError,
+  FaultResponseError,
+  NetworkError,
+  ResponseTagError,
+} from "../src/errors";
 import {
   bootAndStateIdXmlResponse,
+  faultResponse,
+  getDeviceStateResponse,
   getIdentityResponseMasterDimModule,
   getIdentityResponseMasterInModule,
   getIdentityResponseMasterOutModule,
   getIdentityResponseMasterRoomClimateModule,
+  getWeatherResponse,
   setStateResponseRoomClimate,
+  setStateSuccessResponse,
 } from "./mock.constants";
-import { InnoxelApi } from "../src";
+import { IDeviceStatusResponse, InnoxelApi } from "../src";
 import { mergeModuleLists } from "./testHelper";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
@@ -53,6 +62,28 @@ describe("MOCK", () => {
       assert.instanceOf(err, EndpointError);
       assert.equal((err as EndpointError).statusCode, 500);
       assert.equal((err as EndpointError).message, JSON.stringify(body));
+    }
+  });
+
+  it("throws FaultResponseError on SOAP faults", async () => {
+    server.use(http.post(mockApiUrl, () => HttpResponse.text(faultResponse)));
+    try {
+      await api.getDeviceState();
+      assert.fail("no error thrown");
+    } catch (err: unknown) {
+      assert.instanceOf(err, FaultResponseError);
+    }
+  });
+
+  it("throws ResponseTagError on tag mismatch", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(bootAndStateIdXmlResponse)),
+    );
+    try {
+      await api.getDeviceState();
+      assert.fail("no error thrown");
+    } catch (err: unknown) {
+      assert.instanceOf(err, ResponseTagError);
     }
   });
 
@@ -152,5 +183,105 @@ describe("MOCK", () => {
     );
     const result = await api.setRoomClimate(0, "setTemperatureHeating", 21.5);
     assert.equal(result, "21.5");
+  });
+
+  it("gets device state", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(getDeviceStateResponse)),
+    );
+    const result: Partial<IDeviceStatusResponse> = await api.getDeviceState();
+    assert.deepEqual(result, { baseSupplyStateCAN1: "OK" });
+  });
+
+  it("gets weather", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(getWeatherResponse)),
+    );
+    const result = await api.getWeather();
+    assert.equal(result.sunTwilight.value, 100);
+    assert.equal(result.temperatureAir.value, 20.5);
+  });
+
+  it("triggers push button", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(setStateSuccessResponse)),
+    );
+    await api.triggerPushButton(0, 0);
+  });
+
+  it("triggers out module", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(setStateSuccessResponse)),
+    );
+    await api.triggerOutModule(0, 0);
+  });
+
+  it("sets dim value", async () => {
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(setStateSuccessResponse)),
+    );
+    await api.setDimValue(0, 0, 50);
+  });
+
+  it("logs soap messages", async () => {
+    const logs: string[] = [];
+    const logger = (status: string | number, message: string) => {
+      logs.push(`${status}: ${message}`);
+    };
+    api = new InnoxelApi({
+      ip,
+      port,
+      user,
+      password: pass,
+      soapLogger: logger,
+    });
+
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(getDeviceStateResponse)),
+    );
+    await api.getDeviceState();
+
+    assert.isAbove(logs.length, 0);
+    assert.include(logs[0], "POST: ");
+    assert.include(logs[1], "200: ");
+  });
+
+  it("gets module states", async () => {
+    server.use(
+      http.post(mockApiUrl, () =>
+        HttpResponse.text(
+          bootAndStateIdXmlResponse.replace("bootId", "moduleList"),
+        ),
+      ),
+    );
+    const states = await api.getModuleStates();
+    assert.isArray(states);
+  });
+
+  it("uses default port 5001", async () => {
+    api = new InnoxelApi({ ip, user, password: pass });
+    server.use(
+      http.post(`http://${ip}:5001/control`, () =>
+        HttpResponse.text(bootAndStateIdXmlResponse),
+      ),
+    );
+    const result = await api.getBootAndStateIdXml();
+    assert.isString(result);
+  });
+
+  it("gets room climate", async () => {
+    server.use(
+      http.post(mockApiUrl, () =>
+        HttpResponse.text(
+          setStateResponseRoomClimate.replace(
+            "setStateResponse",
+            "getStateResponse",
+          ),
+        ),
+      ),
+    );
+    const rooms = await api.getRoomClimate([0]);
+    assert.isArray(rooms);
+    assert.equal(rooms.length, 1);
   });
 });

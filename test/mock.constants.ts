@@ -209,3 +209,46 @@ export const setStateResponseRoomClimate = `<?xml version="1.0"?>
     </u:setStateResponse>
   </s:Body>
 </s:Envelope>`;
+
+export const getDeviceStateResponse = `<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:getDeviceStateResponse xmlns:u="urn:innoxel-ch:service:noxnetRemote:1">
+            <u:baseSupplyStateCAN1>OK</u:baseSupplyStateCAN1>
+        </u:getDeviceStateResponse>
+    </s:Body>
+</s:Envelope>`;
+
+export const getWeatherResponse = `<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:getStateResponse xmlns:u="urn:innoxel-ch:service:noxnetRemote:1">
+            <u:moduleList>
+                <u:module class="masterWeatherModule" index="-1">
+                    <u:sunTwilight unit="Lux" value="100" />
+                    <u:temperatureAir unit="°C" value="20.5" />
+                </u:module>
+            </u:moduleList>
+        </u:getStateResponse>
+    </s:Body>
+</s:Envelope>`;
+
+export const setStateSuccessResponse = `<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:setStateResponse xmlns:u="urn:innoxel-ch:service:noxnetRemote:1">
+            <u:bootId>test-boot</u:bootId>
+            <u:stateId>test-state</u:stateId>
+        </u:setStateResponse>
+    </s:Body>
+</s:Envelope>`;
+
+export const faultResponse = `<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <s:Fault>
+            <faultcode>s:Client</faultcode>
+            <faultstring>Action not found</faultstring>
+        </s:Fault>
+    </s:Body>
+</s:Envelope>`;
