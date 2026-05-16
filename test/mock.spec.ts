@@ -7,7 +7,7 @@ import {
   getIdentityResponseMasterRoomClimateModule,
   setStateResponseRoomClimate,
 } from "./mock.constants";
-import InnoxelApi from "../src";
+import { InnoxelApi } from "../src";
 import { mergeModuleLists } from "./testHelper";
 import nock from "nock";
 
