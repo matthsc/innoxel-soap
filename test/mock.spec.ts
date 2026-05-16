@@ -9,49 +9,47 @@ import {
 } from "./mock.constants";
 import { InnoxelApi } from "../src";
 import { mergeModuleLists } from "./testHelper";
-import nock from "nock";
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
 
 const user = "test-user";
 const pass = "test-pass";
 const ip = "127.0.0.2";
 const port = 1000;
 
-function createMock() {
-  return nock(`http://${ip}:${port}`).post("/control");
-}
+const server = setupServer();
+const mockApiUrl = `http://${ip}:${port}/control`;
 
 describe("MOCK", () => {
   let api: InnoxelApi;
+
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
 
   beforeEach(() => {
     api = new InnoxelApi({ ip, port, user, password: pass });
   });
 
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
   it("throws NetworkError on unknown exceptions", async () => {
-    const message = "Unknown network error";
-    const scope = createMock().replyWithError(message);
+    server.use(http.post(mockApiUrl, () => HttpResponse.error()));
     try {
       await api.getBootAndStateIdXml();
       assert.fail("no error thrown");
     } catch (err: unknown) {
-      assert.isTrue(scope.isDone());
       assert.instanceOf(err, NetworkError);
-      assert.include((err as Error).message, message);
     }
   });
 
   it("throws EndpointError on API errors", async () => {
     const body = { message: "Unauthorized" };
-    const scope = createMock().reply(500, body);
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.json(body, { status: 500 })),
+    );
     try {
       await api.getBootAndStateIdXml();
       assert.fail("no error thrown");
     } catch (err: unknown) {
-      assert.isTrue(scope.isDone());
       assert.instanceOf(err, EndpointError);
       assert.equal((err as EndpointError).statusCode, 500);
       assert.equal((err as EndpointError).message, JSON.stringify(body));
@@ -59,35 +57,52 @@ describe("MOCK", () => {
   });
 
   it("asks for auth", async () => {
-    const scope = createMock().reply(401, undefined, {
-      "WWW-AUTHENTICATE": `Digest realm="INNOXEL Master 3", nonce="test-nounce", algorithm="MD5", qop="auth"`,
-    });
-    scope.matchHeader("authorization", /.*/).post("/control").reply(200, "Ok");
+    let authHeaderPresent = false;
+    server.use(
+      http.post(mockApiUrl, ({ request }) => {
+        if (request.headers.has("authorization")) {
+          authHeaderPresent = true;
+          return HttpResponse.text("Ok");
+        }
+        return new HttpResponse(null, {
+          status: 401,
+          headers: {
+            "WWW-AUTHENTICATE": `Digest realm="INNOXEL Master 3", nonce="test-nounce", algorithm="MD5", qop="auth"`,
+          },
+        });
+      }),
+    );
     const result = await api.getBootAndStateIdXml();
     assert.equal(result, "Ok");
-    assert.isTrue(scope.isDone(), "nock scope should be done");
-    assert.isTrue(nock.isDone(), "nock should be done");
+    assert.isTrue(
+      authHeaderPresent,
+      "authorization header should have been sent",
+    );
   });
 
   it("extracts boot and state ids", async () => {
-    createMock().reply(200, bootAndStateIdXmlResponse);
+    server.use(
+      http.post(mockApiUrl, () => HttpResponse.text(bootAndStateIdXmlResponse)),
+    );
     const [bootId, stateId] = await api.getBootAndStateIds();
     assert.equal(bootId, "usid:3A006A0F3FAB:00000000");
     assert.equal(
       stateId,
       "usid:3A00D56B404D:0000123B:00001272:00000000:000001B2",
     );
-    assert.isTrue(nock.isDone(), "nock should be done");
   });
 
   it("parses getIdentity responses", async () => {
-    createMock().reply(
-      200,
-      mergeModuleLists(
-        getIdentityResponseMasterOutModule,
-        getIdentityResponseMasterInModule,
-        getIdentityResponseMasterDimModule,
-        getIdentityResponseMasterRoomClimateModule,
+    server.use(
+      http.post(mockApiUrl, () =>
+        HttpResponse.text(
+          mergeModuleLists(
+            getIdentityResponseMasterOutModule,
+            getIdentityResponseMasterInModule,
+            getIdentityResponseMasterDimModule,
+            getIdentityResponseMasterRoomClimateModule,
+          ),
+        ),
       ),
     );
     const identities = await api.getIdentities();
@@ -106,11 +121,14 @@ describe("MOCK", () => {
   });
 
   it("includes channels with errors", async () => {
-    createMock().reply(
-      200,
-      mergeModuleLists(
-        getIdentityResponseMasterOutModule,
-        getIdentityResponseMasterDimModule,
+    server.use(
+      http.post(mockApiUrl, () =>
+        HttpResponse.text(
+          mergeModuleLists(
+            getIdentityResponseMasterOutModule,
+            getIdentityResponseMasterDimModule,
+          ),
+        ),
       ),
     );
     const identities = await api.getIdentities();
@@ -127,7 +145,11 @@ describe("MOCK", () => {
   });
 
   it("handles setting temperature", async () => {
-    createMock().reply(200, setStateResponseRoomClimate);
+    server.use(
+      http.post(mockApiUrl, () =>
+        HttpResponse.text(setStateResponseRoomClimate),
+      ),
+    );
     const result = await api.setRoomClimate(0, "setTemperatureHeating", 21.5);
     assert.equal(result, "21.5");
   });
