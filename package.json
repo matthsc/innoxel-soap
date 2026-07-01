@@ -55,7 +55,7 @@
     "fast-xml-parser": "^5.5.9"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
+    "@arethetypeswrong/cli": "^0.18.4",
     "@biomejs/biome": "^2.4.13",
     "@tsconfig/node22": "^22.0.5",
     "@types/node": "^22.19.2",
