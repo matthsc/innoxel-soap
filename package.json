@@ -45,7 +45,7 @@
     "prepare": "node --run build",
     "prepublishOnly": "node --run check",
     "preversion": "node --run check",
-    "release": "dotenv release-it --only-version",
+    "release": "dotenv run -- release-it --only-version",
     "version": "node --run format && git add -A src"
   },
   "author": "Matthias Schwende (matthsc@gmx.net)",
@@ -60,7 +60,6 @@
     "@types/node": "^22.20.5",
     "@vitest/coverage-v8": "^5.1.0",
     "dotenv": "^18.0.10",
-    "dotenv-cli": "^11.1.0",
     "msw": "^3.0.6",
     "release-it": "^21.1.2",
     "tsdown": "^0.23.7",
