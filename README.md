@@ -16,12 +16,6 @@ The current version has been tested against firmware 1.6.0.0, but most parts alr
 npm install innoxel-soap
 ```
 
-or
-
-```bash
-yarn add innoxel-soap
-```
-
 # Usage
 
 ## Getting started
@@ -41,11 +35,11 @@ const [bootId, stateId] = await api.getBootAndStateIds();
 
 ### InnoxelApi
 
-The main export ist the <code>InnoxelApi</code> class. It provides the main functionality to send messages to innoxel master, and some convenience methods to retrieve/update certain data.
+The main export is the <code>InnoxelApi</code> class. It provides the main functionality to send messages to innoxel master, and some convenience methods to retrieve/update certain data.
 
 #### Constructor
 
-The constructor of the <code>InnoxelApi</code> class acccepts the following configuration object:
+The constructor of the <code>InnoxelApi</code> class accepts the following configuration object:
 
 ```ts
 {
@@ -53,6 +47,7 @@ The constructor of the <code>InnoxelApi</code> class acccepts the following conf
   password: "<password>", // required, password of the user
   ip: "<ip address>", // required, ip address of innoxel master
   port: 5001, // optional, defaults to 5001
+  soapLogger: (status, message) => {}, // optional, logs SOAP requests and responses
 }
 ```
 
@@ -73,7 +68,7 @@ Methods of the <code>InnoxelApi</code> class:
 | <code>triggerPushButton(moduleIndex: number, channel: number, event: ModuleInEvent = "autoImpulse"): Promise&lt;void&gt;</code> | trigger a push button                                                                                     | <code>moduleIndex</code>: module index of the module<br><code>channel</code>: channel to trigger<br><code>event</code>: how to "push" the button                                                   |
 | <code> triggerOutModule(moduleIndex: number, channel: number, event: ModuleOutEvent = "toggle"): Promise&lt;void&gt;</code>     | trigger an Out module                                                                                     | <code>moduleIndex</code>: module index of the module<br><code>channel</code>: channel to trigger<br><code>event</code>: how to trigger the channel                                                 |
 | <code>setDimValue(moduleIndex: number, channel: number, dimValue: number, dimSpeed = 0): Promise&lt;void&gt;</code>             | set the value of a dimmer                                                                                 | <code>moduleIndex</code>: module index of the module<br><code>channel</code>: dimmer channel<br><code>dimValue</code>: value to set (0-100, 0: off)<br><code>dimSpeed</code>: dimming speed (0-15) |
-| <code>setRoomClimate(moduleIndex: number, type: ModuleRoomClimateSetType, temperature: number)</code>                           | set the temperature of a room climate module                                                              | <code>moduleIndex</code>: module index of the module<br><code>type</code>: type of temperature to set<br><code>temperature</code>: temperature to set                                              |
+| <code>setRoomClimate(moduleIndex: number, type: ModuleRoomClimateSetType, temperature: number): Promise&lt;string \| number&gt;</code>                           | set the temperature of a room climate module                                                              | <code>moduleIndex</code>: module index of the module<br><code>type</code>: type of temperature to set<br><code>temperature</code>: temperature to set                                              |
 
 ### SoapMessage
 
