@@ -198,8 +198,14 @@ describe("MOCK", () => {
       http.post(mockApiUrl, () => HttpResponse.text(getWeatherResponse)),
     );
     const result = await api.getWeather();
-    assert.equal(result.sunTwilight.value, 100);
     assert.equal(result.temperatureAir.value, 20.5);
+    assert.equal(result.temperatureAirFelt.value, 19.5);
+    assert.equal(result.windSpeed.value, 2.3);
+    assert.equal(result.sunBrightnessEast.value, 1000);
+    assert.equal(result.sunBrightnessSouth.value, 2000);
+    assert.equal(result.sunBrightnessWest.value, 1500);
+    assert.equal(result.sunTwilight.value, 100);
+    assert.equal(result.precipitation.value, "dry");
   });
 
   it("triggers push button", async () => {

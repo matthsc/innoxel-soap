@@ -225,8 +225,14 @@ export const getWeatherResponse = `<?xml version="1.0"?>
         <u:getStateResponse xmlns:u="urn:innoxel-ch:service:noxnetRemote:1">
             <u:moduleList>
                 <u:module class="masterWeatherModule" index="-1">
-                    <u:sunTwilight unit="Lux" value="100" />
                     <u:temperatureAir unit="°C" value="20.5" />
+                    <u:temperatureAirFelt unit="°C" value="19.5" />
+                    <u:windSpeed unit="m/s" value="2.3" />
+                    <u:sunBrightnessEast unit="Lux" value="1000" />
+                    <u:sunBrightnessSouth unit="Lux" value="2000" />
+                    <u:sunBrightnessWest unit="Lux" value="1500" />
+                    <u:sunTwilight unit="Lux" value="100" />
+                    <u:precipitation unit="" value="dry" />
                 </u:module>
             </u:moduleList>
         </u:getStateResponse>

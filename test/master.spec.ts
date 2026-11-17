@@ -90,7 +90,12 @@ describe("Innoxel Master", () => {
       10,
     );
 
-    if (moduleIndex < 0 || channelIndex < 0) {
+    if (
+      Number.isNaN(moduleIndex) ||
+      Number.isNaN(channelIndex) ||
+      moduleIndex < 0 ||
+      channelIndex < 0
+    ) {
       skip();
       return;
     }
@@ -107,7 +112,7 @@ describe("Innoxel Master", () => {
     );
     const type = process.env.INNOXEL_TEST_MODULE_ROOMCLIMATE_TYPE;
 
-    if (moduleIndex < 0 || !type) {
+    if (Number.isNaN(moduleIndex) || moduleIndex < 0 || !type) {
       skip();
       return;
     }
@@ -121,5 +126,22 @@ describe("Innoxel Master", () => {
       temperature,
     );
     assert.equal(result, temperature);
+  });
+
+  it("loads weather data", async () => {
+    const weather = await api.getWeather();
+    assert.equal(weather.class, "masterWeatherModule");
+    for (const key of [
+      "temperatureAir",
+      "temperatureAirFelt",
+      "windSpeed",
+      "sunBrightnessEast",
+      "sunBrightnessSouth",
+      "sunBrightnessWest",
+      "sunTwilight",
+    ] as const) {
+      assert.typeOf(weather[key].value, "number", key);
+    }
+    assert.typeOf(weather.precipitation.value, "string");
   });
 });
