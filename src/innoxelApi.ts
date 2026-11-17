@@ -1,4 +1,4 @@
-import DigestClient from "digest-fetch";
+import { createDigestFetch } from "./digestFetch";
 import { EndpointError, NetworkError, ResponseTagError } from "./errors";
 import type {
   IDeviceStatusResponse,
@@ -43,8 +43,8 @@ export class InnoxelApi {
   private readonly endpoint: string;
   /** logging for soap messages sent to/from innoxel master */
   private readonly soapLogger?: SoapLogger;
-  /** digest-fetch client */
-  private readonly client: DigestClient;
+  /** digest-authenticated fetch */
+  private readonly digestFetch: ReturnType<typeof createDigestFetch>;
   /** perf: save headers for retrieval of boot and state ids */
   private readonly getIdsMessageHeader: Headers;
   /** perf: save body for retrieval of boot and state ids */
@@ -61,7 +61,7 @@ export class InnoxelApi {
     this.endpoint = `http://${options.ip}:${options.port ?? 5001}/control`;
 
     // prepare digest fetch client
-    this.client = new DigestClient(options.user, options.password);
+    this.digestFetch = createDigestFetch(options.user, options.password);
 
     this.soapLogger = options.soapLogger;
   }
@@ -74,7 +74,7 @@ export class InnoxelApi {
     let response: Response;
     try {
       this.soapLogger?.("POST", body);
-      response = await this.client.fetch(this.endpoint, {
+      response = await this.digestFetch(this.endpoint, {
         method: "POST",
         headers,
         body,

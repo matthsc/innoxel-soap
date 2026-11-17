@@ -51,7 +51,6 @@
   "author": "Matthias Schwende (matthsc@gmx.net)",
   "license": "MIT",
   "dependencies": {
-    "digest-fetch": "^3.1.1",
     "fast-xml-parser": "^5.12.1"
   },
   "devDependencies": {
