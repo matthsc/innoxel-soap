@@ -36,38 +36,37 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "lint": "biome lint",
-    "check": "run-s check:* lint test",
+    "lint": "biome check",
+    "check": "node --run check:tsc && node --run check:exports && node --run lint && node --run test",
     "check:tsc": "tsc --noEmit",
     "check:exports": "attw --pack .",
-    "format": "biome format --write",
+    "format": "biome check --write",
     "build": "tsdown",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run check",
-    "preversion": "npm run check",
+    "prepare": "node --run build",
+    "prepublishOnly": "node --run check",
+    "preversion": "node --run check",
     "release": "dotenv release-it --only-version",
-    "version": "npm run format && git add -A src"
+    "version": "node --run format && git add -A src"
   },
   "author": "Matthias Schwende (matthsc@gmx.net)",
   "license": "MIT",
   "dependencies": {
     "digest-fetch": "^3.1.1",
-    "fast-xml-parser": "^5.5.9"
+    "fast-xml-parser": "^5.12.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
-    "@biomejs/biome": "^2.4.13",
-    "@tsconfig/node22": "^22.0.5",
-    "@types/node": "^22.19.2",
-    "@vitest/coverage-v8": "^4.1.5",
-    "dotenv": "^17.3.1",
-    "dotenv-cli": "^11.0.0",
-    "msw": "^2.14.6",
-    "npm-run-all": "^4.1.5",
-    "release-it": "^20.2.0",
-    "tsdown": "^0.22.1",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@biomejs/biome": "^2.6.8",
+    "@tsconfig/node22": "^22.0.7",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^5.1.0",
+    "dotenv": "^18.0.10",
+    "dotenv-cli": "^11.1.0",
+    "msw": "^3.0.6",
+    "release-it": "^21.1.2",
+    "tsdown": "^0.23.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   },
   "overrides": {
     "fflate": "0.8.2"

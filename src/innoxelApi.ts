@@ -1,3 +1,4 @@
+import DigestClient from "digest-fetch";
 import { EndpointError, NetworkError, ResponseTagError } from "./errors";
 import type {
   IDeviceStatusResponse,
@@ -15,7 +16,6 @@ import type {
 } from "./model";
 import { asArray, getResponseTag, parseXml } from "./requestHelper";
 import { SoapMessage } from "./soapMessage";
-import DigestClient from "digest-fetch";
 
 export type SoapLogger = (status: string | number, message: string) => void;
 

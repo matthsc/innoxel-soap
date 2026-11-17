@@ -1,3 +1,6 @@
+import { HttpResponse, http } from "msw";
+import { setupServer } from "msw/node";
+import { type IDeviceStatusResponse, InnoxelApi } from "../src";
 import {
   EndpointError,
   FaultResponseError,
@@ -16,10 +19,7 @@ import {
   setStateResponseRoomClimate,
   setStateSuccessResponse,
 } from "./mock.constants";
-import { IDeviceStatusResponse, InnoxelApi } from "../src";
 import { mergeModuleLists } from "./testHelper";
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
 
 const user = "test-user";
 const pass = "test-pass";

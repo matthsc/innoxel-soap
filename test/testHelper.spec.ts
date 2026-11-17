@@ -1,9 +1,9 @@
+import { XMLValidator } from "fast-xml-parser";
 import {
   getIdentityResponseMasterDimModule,
   getIdentityResponseMasterInModule,
   getIdentityResponseMasterOutModule,
 } from "./mock.constants";
-import { XMLValidator } from "fast-xml-parser";
 import { mergeModuleLists } from "./testHelper";
 
 describe("testHelper", () => {

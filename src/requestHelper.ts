@@ -1,6 +1,6 @@
+import { XMLParser } from "fast-xml-parser";
 import { FaultResponseError } from "./errors";
 import type { SoapAction } from "./model";
-import { XMLParser } from "fast-xml-parser";
 
 // initialize fast-xml-parser
 const parser = new XMLParser({

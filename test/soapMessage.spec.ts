@@ -1,5 +1,5 @@
-import { SoapMessage } from "../src/soapMessage";
 import type { ModuleRoomClimateSetType } from "../src/model";
+import { SoapMessage } from "../src/soapMessage";
 
 describe("SoapMessage", () => {
   it("generates correct headers", () => {
